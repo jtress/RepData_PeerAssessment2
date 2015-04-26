@@ -1,0 +1,21 @@
+---
+title: "PA2"
+output: html_document
+---
+
+```{r}
+srcfile <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+destfile <- "data.csv.bz2"
+
+if (!file.exists(destfile)) {
+download.file(srcfile, destfile, method = "curl")}
+
+rawdata <- read.csv(destfile)
+avgfatalities <- aggregate(FATALITIES ~ EVTYPE, rawdata, mean)
+avginjuries <- aggregate(INJURIES ~ EVTYPE, rawdata, mean)
+avgboth <- merge(avgfatalities, avginjuries, by = "EVTYPE")
+avgboth$weightedscore <- (avgboth$FATALITIES * 2 + avgboth$INJURIES)
+answer <- avgboth[which.max(avgboth$weightedscore),1]
+```
+
+`r answer`
