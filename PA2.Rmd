@@ -1,7 +1,4 @@
----
-title: "PA2"
-output: html_document
----
+
 
 ```{r}
 srcfile <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
@@ -19,3 +16,13 @@ answer <- avgboth[which.max(avgboth$weightedscore),1]
 ```
 
 `r answer`
+
+```{r}
+avgpropdmg  <- aggregate(PROPDMG ~ EVTYPE, rawdata, mean)
+avgcropdmg <- aggregate(CROPDMG ~ EVTYPE, rawdata, mean)
+avgdmg <- merge(avgpropdmg, avgcropdmg, by = "EVTYPE")
+avgdmg$weighteddmg <- (avgdmg$PROPDMG + avgdmg$CROPDMG)
+answer2 <- avgdmg[which.max(avgdmg$weighteddmg),1]
+```
+
+`r answer2`
